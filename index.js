@@ -1,4 +1,6 @@
 const express = require("express")
+const { userRouter } = require("./routes/user")
+const { courseRouter } = require("./routes/course")
 
 const app = express()
 
@@ -8,27 +10,10 @@ app.get("/", (req, res) => {
     res.json("Welcome to the website")
 })
 
-app.post("/user/signup", (req, res) => {
-    res.json({
-        message: "signup"
-    })
-})
+app.use("/user", userRouter)
 
-app.post("/user/signin", (req, res) => {
-    res.json({
-        message: "signup"
-    })
-})
+app.use("/course", courseRouter);
 
-app.get("/courses", (req, res) => {
-    res.json("All courses")
+app.listen(3000, () => {
+    console.log("listening")
 })
-
-app.get("/user/purchases", (req, res) => {
-    res.json("All purchased courses")
-})
-
-app.post("/course/purchase", (req, res) => {
-    res.json("Course purchase")
-})
-
