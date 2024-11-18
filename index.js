@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const { userRouter } = require("./routes/user")
 const { courseRouter } = require("./routes/course")
 const { Admin } = require("./db")
+require('dotenv').config();
 
 const app = express()
 
@@ -22,7 +23,7 @@ app.use("/course", courseRouter);
 async function main() {
     try {
 
-        await mongoose.connect("mongodb+srv://admin:admin@bookingapp.6fbssia.mongodb.net/joshi_course");
+        await mongoose.connect(process.env.Mongo);
     }
     catch (e) {
         console.log(e);
