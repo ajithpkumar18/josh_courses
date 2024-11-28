@@ -29,8 +29,8 @@ let adminSchema = new Schema({
 // module.exports = { Admin: mongoose.model("admin", adminSchema) }
 
 let purchaseSchema = new Schema({
-    courseId: Schema.ObjectId,
-    userId: Schema.ObjectId
+    userId: Schema.ObjectId,
+    courseId: Schema.ObjectId
 })
 
 // module.exports = { Purchase: mongoose.model("purchases", purchaseSchema) }

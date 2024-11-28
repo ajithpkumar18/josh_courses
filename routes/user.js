@@ -1,6 +1,6 @@
 const { Router } = require("express")
 const zod = require("zod")
-const { userModel } = require("../db")
+const { userModel, purchaseModel, courseModel } = require("../db")
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
 
@@ -49,16 +49,13 @@ userRouter.post("/signin", async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
-    let token = req.headers.token;
-
-
     let user = await userModel.findOne({ email: email })
     if (user) {
         let val = bcrypt.compareSync(password, user.password);
 
         if (val) {
             let token = jwt.sign({ username: user._id }, process.env.JWT_USER_PASSWORD)
-            return res.status(200).json(token)
+            return res.cookie("access_token", token).status(200).json({ message: "Signed in" })
         }
     }
     else {
@@ -66,8 +63,13 @@ userRouter.post("/signin", async (req, res) => {
     }
 })
 
-userRouter.get("/purchases", (req, res) => {
-    res.json("All purchased courses")
+userRouter.get("/purchases", async (req, res) => {
+
+    let userId = req.userId;
+    let purchases = await purchaseModel.find({ userId: userId });
+
+    let courseData = await courseModel.find({ _id: { $in: purchases.map(user => user.courseId) } })
+    res.json({ message: "All purchased courses", courses: courseData })
 })
 
 module.exports = { userRouter: userRouter }

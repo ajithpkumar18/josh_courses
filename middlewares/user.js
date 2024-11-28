@@ -1,17 +1,18 @@
 const jwt = require("jsonwebtoken")
 
 let userMiddleware = (req, res, next) => {
-    const token = req.headers.token;
+    console.log("here");
+
+    const token = req.cookies.access_token;
     let decodedToken = jwt.verify(token, process.env.JWT_USER_PASSWORD)
     if (decodedToken) {
-        req.id = decodedToken.id
+        req.userId = decodedToken.id
+        console.log("next")
         next();
     }
     else {
         return res.status(402).json("Expired token")
     }
-
-    next();
 }
 
 module.exports = {
