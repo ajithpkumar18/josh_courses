@@ -49,16 +49,13 @@ adminRouter.post("/signin", async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
-    let token = req.headers.token;
-
-
     let admin = await adminModel.findOne({ email: email })
     if (admin) {
         let val = bcrypt.compareSync(password, admin.password);
 
         if (val) {
             let token = jwt.sign({ username: admin._id }, process.env.JWT_ADMIN_PASSWORD)
-            return res.status(200).json(token)
+            return res.cookie("access_token", token).status(200).json({ message: "signed in" })
         }
     }
     else {

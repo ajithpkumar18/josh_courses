@@ -4,7 +4,8 @@ let userSchema = new Schema({
     email: String,
     password: String,
     firstName: String,
-    lastName: String
+    lastName: String,
+    purchasedCourse: [{ type: mongoose.Schema.Types.ObjectId, ref: "course" }]
 })
 
 // module.exports = { User: mongoose.model("user", userSchema) };

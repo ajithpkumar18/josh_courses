@@ -1,22 +1,33 @@
 const { Router } = require("express")
 const { userMiddleware } = require("../middlewares/user")
-const { purchaseModel, courseModel } = require("../db")
+const { purchaseModel, courseModel, userModel } = require("../db")
 
 const courseRouter = Router()
 
 courseRouter.get("/", userMiddleware, async (req, res) => {
-    let allcourses = await courseModel.find();
+    let userId = req.userId;
+    let user = await userModel.findOne({ _id: userId })
+    let allcourses = await courseModel.find({ _id: { $in: user.purchasedCourse } });
     res.json({ "All courses": allcourses }).send()
 })
 
-courseRouter.post("/purchase", userMiddleware, async (req, res) => {
+courseRouter.post("/purchase/:id", userMiddleware, async (req, res) => {
     let userId = req.userId
-    let courseId = req.body.id
+    console.log(userId);
 
-    let purchase = await purchaseModel.create({
-        userId: userId,
-        courseId: courseId
+    let courseId = req.params.id
+
+    let user = await userModel.findOneAndUpdate({ _id: userId }, {
+        $push: {
+            purchasedCourse: courseId
+        }
     })
+
+
+    // let purchase = await purchaseModel.create({
+    //     userId: userId,
+    //     courseId: courseId
+    // })
     res.json("purchased a course")
 })
 

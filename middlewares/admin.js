@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken")
 
 let adminMiddleware = (req, res, next) => {
-    const token = req.headers.token;
+    const token = req.cookies.access_token;
     let decodedToken = jwt.verify(token, process.env.JWT_ADMIN_PASSWORD)
     if (decodedToken) {
-        req.userId = decodedToken.id
+        req.userId = decodedToken.username
         next();
     }
     else {
