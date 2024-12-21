@@ -36,7 +36,7 @@ userRouter.post("/signup", async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return res.send("errror")
+        return res.send({ "e": e })
     }
 
 

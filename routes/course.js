@@ -11,6 +11,11 @@ courseRouter.get("/", userMiddleware, async (req, res) => {
     res.json({ "All courses": allcourses }).send()
 })
 
+courseRouter.get("/all", async (req, res) => {
+    let courses = await courseModel.find();
+    res.json({ "List all courses": courses }).send()
+})
+
 courseRouter.post("/purchase/:id", userMiddleware, async (req, res) => {
     let userId = req.userId
     console.log(userId);
@@ -23,11 +28,6 @@ courseRouter.post("/purchase/:id", userMiddleware, async (req, res) => {
         }
     })
 
-
-    // let purchase = await purchaseModel.create({
-    //     userId: userId,
-    //     courseId: courseId
-    // })
     res.json("purchased a course")
 })
 
